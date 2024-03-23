@@ -8,7 +8,9 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Microsoft.TeamFoundation.TestManagement.WebApi;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
@@ -19,32 +21,33 @@ var host = new HostBuilder()
         config.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
         config.AddJsonFile("secret.settings.json", optional: true, reloadOnChange: true);
 
+        
+
         // Additional configuration sources as needed
     })
     .ConfigureOpenApi()
-    .ConfigureServices(services =>
+    .ConfigureServices((hostContext, services) =>
     {
+        IConfiguration configuration = hostContext.Configuration;
+
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
-        ConfigureAppServices(services);
+        ConfigureAppServices(services, configuration);
     })
 
     .Build();
 
 host.Run();
 
-static void ConfigureAppServices(IServiceCollection services)
+static void ConfigureAppServices(IServiceCollection services, IConfiguration configuration)
 {
-    services.AddSingleton<DevOpsConnectorService>(x =>
-    {
-        var config = x.GetRequiredService<IConfiguration>();
+    //services.Configure<DevOpsConfig>(configuration.GetSection("DevOps"));
 
-        var token = config[Const.SETTING_DEVOPS_TOKEN];
-        var orgName = config[Const.SETTING_DEVOPS_ORG];
-        var project = config[Const.SETTING_DEVOPS_PROJECT];
-
-        return new DevOpsConnectorService(token, project, orgName);
+    services.AddSingleton<DevOpsConfig>(_ => {
+        return configuration.GetRequiredSection("DevOps").Get<DevOpsConfig>();
     });
+
+    services.AddSingleton<DevOpsConnectorService>();
 
     services.AddSingleton<IOpenApiConfigurationOptions>(_ =>
     {

@@ -1,5 +1,6 @@
 ﻿using DevOpsGPT.Services.DTO;
 using DevOpsGPT.Services.DTO.AzureDevOpsIterations;
+using Microsoft.Extensions.Options;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.Common;
@@ -15,12 +16,9 @@ using System.Xml.XPath;
 using WorkItem = Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models.WorkItem;
 
 namespace DevOpsGPT.Services;
-public class DevOpsConnectorService(string personalAccessToken, string project, string devOpsOrganizationName)
+public class DevOpsConnectorService(DevOpsConfig devOpsConfig)
 {
     private const string DEVOPS_BASE_URI = "https://dev.azure.com";
-    private readonly string _personalAccessToken = personalAccessToken;
-    private readonly string _project = project;
-    private readonly string _devOpsOrganizationName = devOpsOrganizationName;
 
     #region PUBLIC METHODS
 
@@ -28,11 +26,11 @@ public class DevOpsConnectorService(string personalAccessToken, string project, 
     {
         using (HttpClient client = new HttpClient())
         {
-            string base64Auth = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Format("{0}:{1}", "", _personalAccessToken)));
+            string base64Auth = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Format("{0}:{1}", "", devOpsConfig.PatToken)));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64Auth);
 
             var resp = await client.GetStringAsync(
-                $"https://dev.azure.com/{_devOpsOrganizationName}/{_project}/_apis/work/teamsettings/iterations?api-version=6.0");
+                $"https://dev.azure.com/{devOpsConfig.Organization}/{devOpsConfig.Project}/_apis/work/teamsettings/iterations?api-version=6.0");
 
             return JsonConvert.DeserializeObject<SprintIterationsDTO>(resp);
         }
@@ -81,7 +79,7 @@ public class DevOpsConnectorService(string personalAccessToken, string project, 
                     i.Id.ToString(),
                     i.Fields["System.Title"].ToString(),
                     i.Fields["System.State"].ToString(),
-                    $"{DEVOPS_BASE_URI}/{_devOpsOrganizationName}/{_project}/_workitems/edit/{i.Id}",
+                    $"{DEVOPS_BASE_URI}/{devOpsConfig.Organization}/{devOpsConfig.Project}/_workitems/edit/{i.Id}",
                     i.Fields["System.CreatedDate"].ToString(),
                     i.Fields["System.WorkItemType"].ToString(),
                     i.Fields["System.State"].ToString() == "Doing" ? $"https://devops-gpt.azurewebsites.net/api/task/{i.Id}/resolve" : null);
@@ -129,7 +127,7 @@ public class DevOpsConnectorService(string personalAccessToken, string project, 
             // Create the work item
             return await httpClient.CreateWorkItemAsync(
                 document: patchDocument,
-                project: _project,
+                project: devOpsConfig.Project,
                 type: workItemType
             );
         }
@@ -147,7 +145,7 @@ public class DevOpsConnectorService(string personalAccessToken, string project, 
                 Text = reason
             };
 
-            await httpClient.AddCommentAsync(comment, _project, taskId);
+            await httpClient.AddCommentAsync(comment, devOpsConfig.Project, taskId);
 
             var item = await httpClient.GetWorkItemAsync(taskId);
 
@@ -172,9 +170,9 @@ public class DevOpsConnectorService(string personalAccessToken, string project, 
     #region PRIVATE METHODS
     private WorkItemTrackingHttpClient GetDevOpsClient()
     {
-        var credentials = new VssBasicCredential(string.Empty, _personalAccessToken);
+        var credentials = new VssBasicCredential(string.Empty, devOpsConfig.PatToken);
 
-        var uri = new Uri($"{DEVOPS_BASE_URI}/{_devOpsOrganizationName}");
+        var uri = new Uri($"{DEVOPS_BASE_URI}/{devOpsConfig.Organization}");
 
         return new WorkItemTrackingHttpClient(uri, credentials);
     }
@@ -196,7 +194,7 @@ public class DevOpsConnectorService(string personalAccessToken, string project, 
         builder.Append($@"
 SELECT [Id]
 FROM WorkItems
-WHERE [System.TeamProject] = '{_project}'
+WHERE [System.TeamProject] = '{devOpsConfig.Project}'
 AND[System.IterationPath] = '{currentSprint}'
 AND[System.WorkItemType] <> 'Epic'
 ");
