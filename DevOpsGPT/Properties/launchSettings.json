@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DevOpsGPT": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7165",
+      "launchBrowser": false
+    }
+  }
+}

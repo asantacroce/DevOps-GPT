@@ -1,0 +1,14 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+      "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+      "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+
+      "OpenApi__DocTitle": "DevOps GPT Documentation",
+      "OpenApi__DocDescription": "APIs to support Custom GPT Actions",
+
+      "DevOps__Organization": "andresantacroce-dev",
+      "DevOps__Project": "Yooth",
+      "DevOps__PatToken": "--SECURE--"
+    }
+}
