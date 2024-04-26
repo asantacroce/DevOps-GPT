@@ -33,7 +33,7 @@ param runtime string = 'dotnet'
 var functionAppName = '${appName}-func'
 var hostingPlanName = '${appName}-plan'
 var applicationInsightsName = '${appName}-insights'
-var storageAccountName = '${replace(appName, '-', '')}funcstg'
+var storageAccountName = '${toLower(replace(appName, '-', ''))}funcstg'
 var functionWorkerRuntime = runtime
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
