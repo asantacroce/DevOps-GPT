@@ -401,3 +401,4 @@ FodyWeavers.xsd
 /DevOpsGPT/Properties/ServiceDependencies/gpt-chat-func - Zip Deploy/storage1.arm.json
 /DevOpsGPT/Properties/serviceDependencies.gpt-chat-func - Zip Deploy.json
 /DevOpsGPT/Properties/serviceDependencies.json
+/DevOpsGPT/Properties/ServiceDependencies/gpt-chat-func - Zip Deploy/profile.arm.json
