@@ -1,23 +1,25 @@
-# Custom GPT powered by Azure Functions
+# DevOps-GPT
 
 ## Description
-This project integrates Custom GPT with Azure DevOps using Azure Functions. It allows the GPT to interact with Azure DevOps Project Boards, handling tasks such as querying, creating, and updating work items.
+This project exposes Azure DevOps over OpenAPI using C# Azure Functions. It allows a Custom-GPT to interact with Azure DevOps Project Boards, handling tasks such as querying, creating, and updating work items. For extensive details on the whole project, please read my full blog post at this [link](https://blog.andresantacroce.com/custom-gpt-powered-by-azure-functions).
 
 ## Prerequisites
-- An Azure Subscription
-- Azure DevOps Account
-- AZ CLI installed
-- Visual Studio Community or another C# IDE
-- Azure Function Tools
+* For Local Run and Development
+  * Azure DevOps Account - [here](https://azure.microsoft.com/en-gb/products/devops/)
+  * Visual Studio Community or another C# IDE - [here](https://visualstudio.microsoft.com/vs/community)
+  * Azure Function Tools - [here](https://github.com/Azure/azure-functions-core-tools)
+* Tu support Azure Deploy
+  * An Azure Subscription - [here](https://azure.microsoft.com/en-us/free/)
+  * AZ CLI - [here](https://learn.microsoft.com/en-us/cli/azure/)
 
-## Getting Started
+## Local Run
 These instructions will guide you on setting up and running the project locally for development and testing purposes.
 
-### Setting up the environment
-**Clone the repository:**
- ```bash
+### Clone the repository
+```bash
  git clone https://github.com/yourusername/yourprojectname.git
  ```
+## Deploy to Azure
 
 ### Log in to Azure:
 ```bash
