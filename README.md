@@ -50,7 +50,7 @@ DevOps__PatToken|This is Personal Access Token that you can generate and copy fr
     }
 }
 ```
-### 4. Run the Functions Emulator
+### 4. Run the Function App in Emulator
 
 ```bash
 func start
@@ -68,7 +68,7 @@ az login
 
 ### Create a resource group:
 ```bash
-az group create --name liveGPT --location westeurope
+az group create --name <resGroupName> --location <locationName>
 ```
 
 Parameters:
@@ -79,7 +79,7 @@ Parameters:
 ### Provision the Infrastructure
 
 ```bash
-az deployment group create --resource-group liveGPT --template-file main.bicep --parameters devOpsOrganization=andresantacroce-dev devOpsProject=Yooth
+az deployment group create --resource-group <resGroupName> --template-file main.bicep --parameters devOpsOrganization=<orgName> devOpsProject=<projectName>
 ```
 
 Parameters:
@@ -90,5 +90,5 @@ Parameters:
 
 ### Deploy the function using Azure CLI:
 ```bash
-func azure functionapp publish liveGPT-func
+func azure functionapp publish <functionAppName>
 ```
