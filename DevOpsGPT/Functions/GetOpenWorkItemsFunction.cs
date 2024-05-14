@@ -26,7 +26,7 @@ namespace DevOpsGPT.Functions
         [OpenApiParameter(name: "state", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The state of the Work Item. Possibile values: Doing, To Do, Done")]
         public async Task<IActionResult> Run(
             [HttpTrigger(
-            AuthorizationLevel.Anonymous,
+            AuthorizationLevel.Function,
             Const.Functions.METHOD_GET,
             Route = Const.Functions.ROUTE_TASKS)] HttpRequest req)
         {
