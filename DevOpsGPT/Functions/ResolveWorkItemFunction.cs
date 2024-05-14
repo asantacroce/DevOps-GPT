@@ -28,7 +28,7 @@ namespace DevOpsGPT.Functions
         [OpenApiParameter("id", In = ParameterLocation.Path, Required = true )]
         [OpenApiRequestBody(contentType: Const.Functions.APPLICATION_JSON, bodyType: typeof(ResolveTaskDTO), Required = true, Description = "Providers the resolution comment.")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(Microsoft.Azure.Functions.Worker.AuthorizationLevel.Anonymous,
+            [HttpTrigger(Microsoft.Azure.Functions.Worker.AuthorizationLevel.Function,
             Const.Functions.METHOD_POST,
             Route = "task/{id}/resolve")] HttpRequest req, int id)
         {

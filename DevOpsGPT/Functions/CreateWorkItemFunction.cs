@@ -27,7 +27,7 @@ namespace DevOpsGPT.Functions
         [OpenApiResponseWithBody(HttpStatusCode.Created, Const.Functions.APPLICATION_JSON, typeof(IList<WorkItemDTO>))]
         [OpenApiRequestBody(contentType: Const.Functions.APPLICATION_JSON, bodyType: typeof(CreateTaskDTO), Required = true, Description = "The Work Item to be created")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(Microsoft.Azure.Functions.Worker.AuthorizationLevel.Anonymous,
+            [HttpTrigger(Microsoft.Azure.Functions.Worker.AuthorizationLevel.Function,
             Const.Functions.METHOD_POST,
             Route = Const.Functions.ROUTE_TASKS)] HttpRequest req)
         {
