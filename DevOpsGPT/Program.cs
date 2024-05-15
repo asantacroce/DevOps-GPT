@@ -1,6 +1,5 @@
-using DevOpsGPT.Application;
+using CommonLib.Logging;
 using DevOpsGPT.Services;
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Abstractions;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Configurations;
@@ -8,9 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Microsoft.TeamFoundation.TestManagement.WebApi;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
@@ -20,18 +17,14 @@ var host = new HostBuilder()
 
         config.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
         config.AddJsonFile("secret.settings.json", optional: true, reloadOnChange: true);
-
-        
-
-        // Additional configuration sources as needed
     })
     .ConfigureOpenApi()
     .ConfigureServices((hostContext, services) =>
     {
         IConfiguration configuration = hostContext.Configuration;
 
-        services.AddApplicationInsightsTelemetryWorkerService();
-        services.ConfigureFunctionsApplicationInsights();
+        services.AddCommonLogging();
+
         ConfigureAppServices(services, configuration);
     })
 
