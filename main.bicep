@@ -138,3 +138,10 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
     Request_Source: 'rest'
   }
 }
+
+  resource functionAppHost 'Microsoft.Web/sites/host@2022-09-01' existing = {
+  name: 'default'
+  parent: functionApp
+}
+
+output defaultHostKey string = functionAppHost.listKeys().functionKeys.default
