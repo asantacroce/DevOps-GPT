@@ -20,18 +20,13 @@ var host = new HostBuilder()
 
         config.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
         config.AddJsonFile("secret.settings.json", optional: true, reloadOnChange: true);
-
-        
-
-        // Additional configuration sources as needed
     })
     .ConfigureOpenApi()
     .ConfigureServices((hostContext, services) =>
     {
         IConfiguration configuration = hostContext.Configuration;
+        services.AddCommonLogging();
 
-        services.AddApplicationInsightsTelemetryWorkerService();
-        services.ConfigureFunctionsApplicationInsights();
         ConfigureAppServices(services, configuration);
     })
 
