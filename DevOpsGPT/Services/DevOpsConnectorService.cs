@@ -22,21 +22,6 @@ public class DevOpsConnectorService(DevOpsConfig devOpsConf)
     private readonly DevOpsConfig _devOpsConfig = devOpsConf;
 
     #region PUBLIC METHODS
-
-    public async Task<SprintIterationsDTO> GetSprints()
-    {
-        using (HttpClient client = new HttpClient())
-        {
-            string base64Auth = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Format("{0}:{1}", "", _devOpsConfig.PatToken)));
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64Auth);
-
-            var resp = await client.GetStringAsync(
-                $"https://dev.azure.com/{_devOpsConfig.Organization}/{_devOpsConfig.Project}/_apis/work/teamsettings/iterations?api-version=6.0");
-
-            return JsonConvert.DeserializeObject<SprintIterationsDTO>(resp);
-        }
-    }
-
     public async Task<IList<WorkItemDTO>> QueryTasks(string state = null)
     {
         List<WorkItemDTO> workItems = new List<WorkItemDTO>();
@@ -169,6 +154,20 @@ public class DevOpsConnectorService(DevOpsConfig devOpsConf)
     #endregion
 
     #region PRIVATE METHODS
+    internal async Task<SprintIterationsDTO> GetSprints()
+    {
+        using (HttpClient client = new HttpClient())
+        {
+            string base64Auth = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Format("{0}:{1}", "", _devOpsConfig.PatToken)));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64Auth);
+
+            var resp = await client.GetStringAsync(
+                $"https://dev.azure.com/{_devOpsConfig.Organization}/{_devOpsConfig.Project}/_apis/work/teamsettings/iterations?api-version=6.0");
+
+            return JsonConvert.DeserializeObject<SprintIterationsDTO>(resp);
+        }
+    }
+
     private WorkItemTrackingHttpClient GetDevOpsClient()
     {
         var credentials = new VssBasicCredential(string.Empty, _devOpsConfig.PatToken);

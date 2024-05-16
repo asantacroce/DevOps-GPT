@@ -34,8 +34,6 @@ host.Run();
 
 static void ConfigureAppServices(IServiceCollection services, IConfiguration configuration)
 {
-    //services.Configure<DevOpsConfig>(configuration.GetSection("DevOps"));
-
     services.AddSingleton<DevOpsConfig>(_ => {
         return configuration.GetRequiredSection("DevOps").Get<DevOpsConfig>();
     });
