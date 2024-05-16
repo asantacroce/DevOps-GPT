@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace DevOpsGPT.Functions
@@ -34,8 +35,11 @@ namespace DevOpsGPT.Functions
 
             var state = req.Query["state"];
 
-            var bugs = await _service.QueryTasks(state);
-            return new OkObjectResult(bugs);
+            var tasks = await _service.QueryTasks(state);
+
+            _logger.LogInformation($"Tasks retrieved: {JsonConvert.SerializeObject(tasks)}");
+
+            return new OkObjectResult(tasks);
         }
     }
 }

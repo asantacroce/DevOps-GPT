@@ -38,6 +38,9 @@ namespace DevOpsGPT.Functions
             CreateTaskDTO createTaskDTO = JsonConvert.DeserializeObject<CreateTaskDTO>(requestBody);
 
             var workItem = await _service.CreateTask(createTaskDTO);
+
+            _logger.LogInformation($"Work Item created: {JsonConvert.SerializeObject(workItem)}");
+
             return new OkObjectResult(workItem);
         }
     }
