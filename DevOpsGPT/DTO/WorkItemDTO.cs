@@ -5,6 +5,5 @@ public record WorkItemDTO(
     string State,
     string Uri,
     string DateCreated,
-    string WorkItemType,
-    string ResolveItemLink
+    string WorkItemType
     );

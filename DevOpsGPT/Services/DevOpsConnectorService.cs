@@ -67,8 +67,7 @@ public class DevOpsConnectorService(DevOpsConfig devOpsConf)
                     i.Fields["System.State"].ToString(),
                     $"{DEVOPS_BASE_URI}/{_devOpsConfig.Organization}/{_devOpsConfig.Project}/_workitems/edit/{i.Id}",
                     i.Fields["System.CreatedDate"].ToString(),
-                    i.Fields["System.WorkItemType"].ToString(),
-                    i.Fields["System.State"].ToString() == "Doing" ? $"https://devops-gpt.azurewebsites.net/api/task/{i.Id}/resolve" : null);
+                    i.Fields["System.WorkItemType"].ToString());
 
                 workItems.Add(
                     item
