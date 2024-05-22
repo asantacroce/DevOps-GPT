@@ -11,12 +11,7 @@ namespace DevOpsGPT.Test
             var token = config["DevOpsPatToken"];
             var project = config["DevOpsProject"];
 
-
-
-            return new DevOpsConnectorService(
-                token,
-                project,
-                org);
+            return new DevOpsConnectorService(new DevOpsConfig() { Organization = org, PatToken = token, Project = project });
         }
     }
 }

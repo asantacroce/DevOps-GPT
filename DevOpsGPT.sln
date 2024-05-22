@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{DE9ADE6E-B1E4-4827-B4E1-92D972AA0F3E}"
 	ProjectSection(SolutionItems) = preProject
 		main.bicep = main.bicep
+		minimal.bicep = minimal.bicep
 	EndProjectSection
 EndProject
 Global

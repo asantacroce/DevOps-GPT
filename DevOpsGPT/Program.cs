@@ -13,8 +13,6 @@ var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
     .ConfigureAppConfiguration((hostingContext, config) =>
     {
-        var env = hostingContext.HostingEnvironment;
-
         config.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
         config.AddJsonFile("secret.settings.json", optional: true, reloadOnChange: true);
     })
@@ -34,8 +32,6 @@ host.Run();
 
 static void ConfigureAppServices(IServiceCollection services, IConfiguration configuration)
 {
-    //services.Configure<DevOpsConfig>(configuration.GetSection("DevOps"));
-
     services.AddSingleton<DevOpsConfig>(_ => {
         return configuration.GetRequiredSection("DevOps").Get<DevOpsConfig>();
     });
@@ -50,14 +46,7 @@ static void ConfigureAppServices(IServiceCollection services, IConfiguration con
             {
                 Version = DefaultOpenApiConfigurationOptions.GetOpenApiDocVersion(),
                 Title = $"{DefaultOpenApiConfigurationOptions.GetOpenApiDocTitle()}",
-                Description = DefaultOpenApiConfigurationOptions.GetOpenApiDocDescription(),
-                TermsOfService = new Uri("https://andresantacroce.com"),
-                Contact = new OpenApiContact()
-                {
-                    Name = "Andre Santacroce",
-                    Email = "info@andresantacroce.com",
-                    Url = new Uri("https://andresantacroce.com"),
-                }
+                Description = DefaultOpenApiConfigurationOptions.GetOpenApiDocDescription()
             },
             Servers = DefaultOpenApiConfigurationOptions.GetHostNames(),
             OpenApiVersion = OpenApiVersionType.V3,
